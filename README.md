@@ -3,7 +3,7 @@ Implementación del proyecto practico integrador de Diseño de Sistemas 2021 - G
 
 Integrantes del Equipo de Desarollo
 
--Ulises Vega
--Germán De Nicola
--Agostina Formia
+-Ulises Vega<br />
+-Germán De Nicola<br />
+-Agostina Formia<br />
 
