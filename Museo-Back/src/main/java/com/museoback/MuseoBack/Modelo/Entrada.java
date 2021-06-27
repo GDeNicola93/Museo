@@ -25,4 +25,6 @@ public class Entrada implements Serializable {
     private Long numero;
     @ManyToOne
     private Tarifa tarifa;
+    @ManyToOne
+    private Sede sede;
 }
