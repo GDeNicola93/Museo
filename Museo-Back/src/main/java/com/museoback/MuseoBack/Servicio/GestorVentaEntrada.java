@@ -39,4 +39,16 @@ public class GestorVentaEntrada {
     public LocalTime buscarExposicionVigente(){
         return this.buscarEmpleadoLogeado().getSedeDondeTrabaja().calcularDuracionAExposicionesVigentes(this.obtenerFechaHoraActual().toLocalDate());
     }
+    
+    public void validarLimiteVisitantes(){
+        
+    }
+    
+    public void buscarVisitantesEnSede(){
+        
+    }
+    
+    public void buscarReservasParaAsistir(){
+        
+    }
 }

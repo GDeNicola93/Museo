@@ -19,22 +19,46 @@
                           <tr>
                             <th scope="col"></th>
                             <th scope="col">Monto</th>
+                            <th scope="col">Adicional Guia</th>
                             <th scope="col">Tipo entrada</th>
                             <th scope="col">Tipo Visita</th>
                             <th scope="col">Selección</th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody *ngFor="let tarifa of tablaTarifas">
                           <tr>
                             <th></th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td><button type="button" class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="right" title="Seleccionar tarifa"><i class="fas fa-check"></i></button></td>
+                            <td>$ {{tarifa.monto}}</td>
+                            <td>$ {{tarifa.montoAdicionalGuia}}</td>
+                            <td>{{tarifa.tipoEntrada.nombre}}</td>
+                            <td>{{tarifa.tipoVisita.nombre}}</td>
+                            <td>
+                              <div class="row">
+                                <div class="col">
+                                  <button *ngIf="tarifa != tarifaSeleccionada" (click)="tomarSeleccionTarifa(tarifa)" type="button" class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="right" title="Seleccionar tarifa"><i class="fas fa-check"></i></button>
+                                  <button *ngIf="tarifa == tarifaSeleccionada" (click)="eliminarSeleccionTarifa()" type="button" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="right" title="Seleccionar tarifa"><i class="fas fa-times"></i></button>
+                                </div>
+                              </div>
+                            </td>
                           </tr>
                         </tbody>
                       </table>
                 </div>
+                <div class="form-group">
+                  <label>Ingrese cantidad de entradas a emitir: </label>
+                  <input type="number" class="form-control">
+                </div>
+                <div class="form-group">
+                  <div class="mt-2 alert alert-danger" role="alert">
+                    <i class="fas fa-user-clock"></i> ¡Se supera el limite de visitantes!
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Detalle de venta de entradas:</label>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="float-right btn btn-sm btn-success"><i class="far fa-save"></i> Confirmar</button>
+              </div>
             </form>
         </div>
     </div>
