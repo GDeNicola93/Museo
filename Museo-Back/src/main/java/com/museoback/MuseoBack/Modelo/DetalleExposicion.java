@@ -1,6 +1,7 @@
 package com.museoback.MuseoBack.Modelo;
 
 import java.io.Serializable;
+import java.time.LocalTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,4 +22,8 @@ public class DetalleExposicion implements Serializable {
     
     @OneToOne
     private Obra obra;
+    
+    public LocalTime buscarDuracionExpResObra(){
+        return this.getObra().getDuracionResumida();
+    }
 }

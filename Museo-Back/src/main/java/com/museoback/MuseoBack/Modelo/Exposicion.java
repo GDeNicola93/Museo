@@ -3,8 +3,9 @@ package com.museoback.MuseoBack.Modelo;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,5 +33,20 @@ public class Exposicion implements Serializable {
     @ManyToOne
     private Empleado empleadoCreo;  
     @OneToMany
-    private Set<DetalleExposicion> detalleExposicion = new HashSet<>();
+    private List<DetalleExposicion> detalleExposicion = new ArrayList<>();
+    
+    public boolean esVigente(LocalDate fechaActual){
+        return true;
+    }
+    
+    public LocalTime calcularDuracionObrasExpuestas(){
+        LocalTime duracionTotal = LocalTime.of(0,0,0);
+        for(DetalleExposicion dt : this.getDetalleExposicion()){
+            LocalTime duracionObra = dt.buscarDuracionExpResObra();
+            duracionTotal = duracionTotal.plus(duracionObra.getSecond(),ChronoUnit.SECONDS);
+            duracionTotal = duracionTotal.plus(duracionObra.getMinute(),ChronoUnit.MINUTES);
+            duracionTotal = duracionTotal.plus(duracionObra.getHour(),ChronoUnit.HOURS);
+        }
+        return duracionTotal;
+    }
 }

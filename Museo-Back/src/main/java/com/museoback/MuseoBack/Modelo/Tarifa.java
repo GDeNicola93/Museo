@@ -2,12 +2,11 @@ package com.museoback.MuseoBack.Modelo;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Calendar;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
+import javax.persistence.ManyToOne;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,4 +25,18 @@ public class Tarifa implements Serializable {
     private double monto;
     
     private double montoAdicionalGuia;
+    
+    @ManyToOne
+    private TipoEntrada tipoEntrada;
+    
+    @ManyToOne
+    private TipoVisita tipoVisita;
+    
+    public boolean esVigente(LocalDate fechaActual){
+        if(fechaActual.isAfter(this.getFechaInicioVigencia()) && fechaActual.isBefore(this.getFechaFinVigencia())){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

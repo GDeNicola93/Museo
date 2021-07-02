@@ -2,6 +2,7 @@ package com.museoback.MuseoBack.Modelo;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-class Empleado implements Serializable {
+public class Empleado implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -35,4 +36,8 @@ class Empleado implements Serializable {
     private String telefono;
     @ManyToOne
     private Sede sedeDondeTrabaja;
+    
+    public List<Tarifa> mostrarTarifasVigentes(LocalDate fechaActual){
+        return this.getSedeDondeTrabaja().mostrarTarifasVigentes(fechaActual);
+    }
 }
