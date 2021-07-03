@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,8 +26,8 @@ public class ControladorVentaEntrada {
         return this.gestorVentaEntrada.buscarTarifasSedeEmpleado();
     }
     
-    @GetMapping("/duracion-total-guia")
-    public LocalTime buscarExposicionVigente(){
-        return this.gestorVentaEntrada.buscarExposicionVigente();
+    @GetMapping("/validar-limite-visitantes/{cantidad-entradas}")
+    public boolean validarLimitevisitantes(@PathVariable(value="cantidad-entradas") Integer cantidadEntradas){
+        return this.gestorVentaEntrada.validarLimiteVisitantes(cantidadEntradas);
     }
 }

@@ -2,10 +2,13 @@ package com.museoback.MuseoBack.Servicio;
 
 import com.museoback.MuseoBack.Modelo.Usuario;
 import com.museoback.MuseoBack.Modelo.Empleado;
+import com.museoback.MuseoBack.Modelo.Entrada;
+import com.museoback.MuseoBack.Modelo.ReservaVisita;
+import com.museoback.MuseoBack.Modelo.Sede;
 import com.museoback.MuseoBack.Modelo.Tarifa;
 import com.museoback.MuseoBack.Persistencia.EntradaRepositorio;
+import com.museoback.MuseoBack.Persistencia.ReservaVisitaRepositorio;
 import com.museoback.MuseoBack.Persistencia.UsuarioRepositorio;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -20,6 +23,9 @@ public class GestorVentaEntrada {
     
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
+    
+    @Autowired
+    private ReservaVisitaRepositorio reservaVisitaRepositorio;
     
     public Empleado buscarEmpleadoLogeado(){
         Optional<Usuario> usuarioLogeado = this.usuarioRepositorio.findById(1);
@@ -40,15 +46,38 @@ public class GestorVentaEntrada {
         return this.buscarEmpleadoLogeado().getSedeDondeTrabaja().calcularDuracionAExposicionesVigentes(this.obtenerFechaHoraActual().toLocalDate());
     }
     
-    public void validarLimiteVisitantes(){
+    public boolean validarLimiteVisitantes(Integer cantidadEntradas){
+        Integer cantVisitantesactuales;
+        LocalDateTime fechaHoraActual = this.obtenerFechaHoraActual();
+        Sede sedeEmpleado = this.buscarEmpleadoLogeado().getSedeDondeTrabaja();
+        cantVisitantesactuales = this.buscarVisitantesEnSede(fechaHoraActual, sedeEmpleado,this.buscarExposicionVigente());
+        cantVisitantesactuales = cantVisitantesactuales + this.buscarReservasParaAsistir(fechaHoraActual, sedeEmpleado);
+        Integer visitantesDisponibles = sedeEmpleado.getCantMaximaVisitantes() - cantVisitantesactuales;       
+        if(cantidadEntradas <= visitantesDisponibles){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public Integer buscarVisitantesEnSede(LocalDateTime fechaHoraActual,Sede sede,LocalTime duracionVisita){
+        Integer cantidadEntradas = 0;
+        List<Entrada> entradas = entradaRepositorio.findAll();
+        for(Entrada e : entradas){
+            if(e.sonDeFechaHoraYSede(fechaHoraActual,sede,duracionVisita)){
+                cantidadEntradas = cantidadEntradas + 1;
+            }
+        }
+        return cantidadEntradas;
         
     }
     
-    public void buscarVisitantesEnSede(){
-        
-    }
-    
-    public void buscarReservasParaAsistir(){
-        
+    public Integer buscarReservasParaAsistir(LocalDateTime fechaHoraActual,Sede sede){
+        Integer cantidadReservasConfirmadas = 0;
+        List<ReservaVisita> reservas = reservaVisitaRepositorio.findAll();
+        for(ReservaVisita rv : reservas){
+            cantidadReservasConfirmadas = cantidadReservasConfirmadas + rv.sonParaFechaHoraYSede(fechaHoraActual, sede);
+        }
+        return cantidadReservasConfirmadas;
     }
 }

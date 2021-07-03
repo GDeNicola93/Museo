@@ -30,4 +30,20 @@ public class ReservaVisita implements Serializable {
     
     @ManyToOne
     private Sede sede;
+    
+    public Integer sonParaFechaHoraYSede(LocalDateTime fechaHoraActual,Sede sede){
+        if(this.getSede().equals(sede)){
+            if(this.getFechaHoraReserva().toLocalDate().equals(fechaHoraActual.toLocalDate())){
+                if(this.getHoraInicioReal().isBefore(fechaHoraActual.toLocalTime()) && this.getHoraFinReal().isAfter(fechaHoraActual.toLocalTime())){
+                    return this.getCantidadAlumnosConfirmada();
+                }else{
+                    return 0;
+                }
+            }else{
+                return 0;
+            }
+        }else{
+            return 0;
+        }
+    }
 }

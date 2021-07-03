@@ -2,7 +2,9 @@ package com.museoback.MuseoBack.Modelo;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,4 +29,28 @@ public class Entrada implements Serializable {
     private Tarifa tarifa;
     @ManyToOne
     private Sede sede;
+    
+    public boolean sonDeFechaHoraYSede(LocalDateTime fechaHoraActual,Sede sede,LocalTime duracionVisita){
+        if(this.getSede().equals(sede)){
+            if(this.getFechaVta().equals(fechaHoraActual.toLocalDate())){
+               LocalTime sumaHoraVentaDuracionVisita = this.getHoraVta();
+               
+               sumaHoraVentaDuracionVisita = sumaHoraVentaDuracionVisita.plus(duracionVisita.getSecond(),ChronoUnit.SECONDS);
+               sumaHoraVentaDuracionVisita = sumaHoraVentaDuracionVisita.plus(duracionVisita.getMinute(),ChronoUnit.MINUTES);
+               sumaHoraVentaDuracionVisita = sumaHoraVentaDuracionVisita.plus(duracionVisita.getHour(),ChronoUnit.HOURS);
+              
+       
+               if(sumaHoraVentaDuracionVisita.isAfter(fechaHoraActual.toLocalTime())){
+                   
+                   return true;
+               }else{
+                   return false;
+               }
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
 }
