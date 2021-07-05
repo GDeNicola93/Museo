@@ -1,5 +1,6 @@
 package com.museoback.MuseoBack.Servicio;
 
+import com.museoback.MuseoBack.Dtos.VentaEntradaDto;
 import com.museoback.MuseoBack.Modelo.Usuario;
 import com.museoback.MuseoBack.Modelo.Empleado;
 import com.museoback.MuseoBack.Modelo.Entrada;
@@ -11,6 +12,7 @@ import com.museoback.MuseoBack.Persistencia.ReservaVisitaRepositorio;
 import com.museoback.MuseoBack.Persistencia.UsuarioRepositorio;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,5 +81,26 @@ public class GestorVentaEntrada {
             cantidadReservasConfirmadas = cantidadReservasConfirmadas + rv.sonParaFechaHoraYSede(fechaHoraActual, sede);
         }
         return cantidadReservasConfirmadas;
+    }
+    
+    public List<Entrada> generarEntradas(VentaEntradaDto ventaEntradaDto){
+        List<Entrada> entradasGeneradas = new ArrayList<>();
+        LocalDateTime fechaHoraActual = this.obtenerFechaHoraActual();
+        Sede sedeEmpleadoLogeado = this.buscarEmpleadoLogeado().getSedeDondeTrabaja();
+        Integer cantEntradasAGenerar = ventaEntradaDto.getCantEntradas();
+        for(int i = 0;i<cantEntradasAGenerar;i++){
+            Entrada entradaGenerada = new Entrada();
+            entradaGenerada.setFechaVta(fechaHoraActual.toLocalDate());
+            entradaGenerada.setHoraVta(fechaHoraActual.toLocalTime());
+            entradaGenerada.setSede(sedeEmpleadoLogeado);
+            if(ventaEntradaDto.isGuia()){
+                entradaGenerada.setMonto(ventaEntradaDto.getTarifa().getMonto() + ventaEntradaDto.getTarifa().getMontoAdicionalGuia());
+            }else{
+                entradaGenerada.setMonto(ventaEntradaDto.getTarifa().getMonto());
+            }
+            entradaGenerada.setTarifa(ventaEntradaDto.getTarifa());
+            entradaRepositorio.save(entradaGenerada);
+        }
+        return entradasGeneradas;
     }
 }

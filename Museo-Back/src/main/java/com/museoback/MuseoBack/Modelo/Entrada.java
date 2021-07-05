@@ -11,11 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@NoArgsConstructor
 public class Entrada implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +27,10 @@ public class Entrada implements Serializable {
     private Tarifa tarifa;
     @ManyToOne
     private Sede sede;
+    
+    public Entrada(){
+        
+    }
     
     public boolean sonDeFechaHoraYSede(LocalDateTime fechaHoraActual,Sede sede,LocalTime duracionVisita){
         if(this.getSede().equals(sede)){
