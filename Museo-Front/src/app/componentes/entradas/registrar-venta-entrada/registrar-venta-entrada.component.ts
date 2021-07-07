@@ -24,7 +24,7 @@ export class RegistrarVentaEntradaComponent implements OnInit {
 
   habilitarVentana() : void{
     this.mostrarTarifasVigenentes();
-    this.validarLimiteVisitantes();
+    this.tomarCantidadEntradas();
     this.tarifaSeleccionada = null;
     this.limiteVisitantesSuperado = true;
     this.form.cantEntradas = 1;
@@ -37,7 +37,8 @@ export class RegistrarVentaEntradaComponent implements OnInit {
     });
   }
 
-  validarLimiteVisitantes() : void{
+  
+  tomarCantidadEntradas() : void{
     this.gestorVentaEntrada.validarLimiteVisitantes(this.form.cantEntradas).subscribe(data =>{
       this.limiteVisitantesSuperado = data;
     });
@@ -51,7 +52,7 @@ export class RegistrarVentaEntradaComponent implements OnInit {
     this.tarifaSeleccionada = null;
   }
 
-  confirmar() : void{
+  tomarConfirmacionVta() : void{
     this.form.tarifa = this.tarifaSeleccionada;
     this.gestorVentaEntrada.generarEntradas(this.form).subscribe(data =>{
       this.entradasGeneradas = data;

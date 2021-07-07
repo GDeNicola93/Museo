@@ -17,19 +17,27 @@ import lombok.Data;
 public class Entrada implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     
     private LocalDate fechaVta;
     private LocalTime horaVta;
     private double monto;
     private Long numero;
+    
     @ManyToOne
     private Tarifa tarifa;
     @ManyToOne
     private Sede sede;
     
-    public Entrada(){
-        
+    public Entrada(){}
+    
+    public Entrada(LocalDate fechaVta,LocalTime horaVta,Sede sede,Tarifa tarifa,double monto,Long numero){
+        this.fechaVta = fechaVta;
+        this.horaVta = horaVta;
+        this.sede = sede;
+        this.tarifa = tarifa;
+        this.monto = monto;
+        this.numero = numero;
     }
     
     public boolean sonDeFechaHoraYSede(LocalDateTime fechaHoraActual,Sede sede,LocalTime duracionVisita){
@@ -43,7 +51,6 @@ public class Entrada implements Serializable {
               
        
                if(sumaHoraVentaDuracionVisita.isAfter(fechaHoraActual.toLocalTime())){
-                   
                    return true;
                }else{
                    return false;

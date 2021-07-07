@@ -11,7 +11,7 @@
 
     <div class="card shadow">
         <div class="card-body">
-            <form (submit)="confirmar()">
+            <form (submit)="tomarConfirmacionVta()">
                 <div class="form-group">
                     <label style="font-weight: bold;">Seleccione una tarifa: </label>
                     <table class="table">
@@ -54,7 +54,7 @@
                 </div>
                 <div class="form-group">
                   <label style="font-weight: bold;">Ingrese cantidad de entradas a emitir: </label>
-                  <input [(ngModel)]="form.cantEntradas" name="cantEntradas" type="number" min="1" value="1" class="form-control" (ngModelChange)="validarLimiteVisitantes()">
+                  <input [(ngModel)]="form.cantEntradas" name="cantEntradas" type="number" min="1" value="1" class="form-control" (ngModelChange)="tomarCantidadEntradas()">
                 </div>
                 <div class="form-group" *ngIf="limiteVisitantesSuperado == false">
                   <div class="mt-2 alert alert-danger" role="alert">

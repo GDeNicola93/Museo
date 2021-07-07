@@ -89,18 +89,23 @@ public class GestorVentaEntrada {
         Sede sedeEmpleadoLogeado = this.buscarEmpleadoLogeado().getSedeDondeTrabaja();
         Integer cantEntradasAGenerar = ventaEntradaDto.getCantEntradas();
         for(int i = 0;i<cantEntradasAGenerar;i++){
-            Entrada entradaGenerada = new Entrada();
-            entradaGenerada.setFechaVta(fechaHoraActual.toLocalDate());
-            entradaGenerada.setHoraVta(fechaHoraActual.toLocalTime());
-            entradaGenerada.setSede(sedeEmpleadoLogeado);
-            if(ventaEntradaDto.isGuia()){
-                entradaGenerada.setMonto(ventaEntradaDto.getTarifa().getMonto() + ventaEntradaDto.getTarifa().getMontoAdicionalGuia());
-            }else{
-                entradaGenerada.setMonto(ventaEntradaDto.getTarifa().getMonto());
-            }
-            entradaGenerada.setTarifa(ventaEntradaDto.getTarifa());
-            entradaRepositorio.save(entradaGenerada);
+             if(ventaEntradaDto.isGuia()){
+                 Entrada entradaGenerada = new Entrada(fechaHoraActual.toLocalDate(),fechaHoraActual.toLocalTime(),sedeEmpleadoLogeado,ventaEntradaDto.getTarifa(),ventaEntradaDto.getTarifa().getMonto() + ventaEntradaDto.getTarifa().getMontoAdicionalGuia(),generarNroEntrada());
+                 entradaRepositorio.save(entradaGenerada);
+             }else{
+                 Entrada entradaGenerada = new Entrada(fechaHoraActual.toLocalDate(),fechaHoraActual.toLocalTime(),sedeEmpleadoLogeado,ventaEntradaDto.getTarifa(),ventaEntradaDto.getTarifa().getMonto(),generarNroEntrada());
+                 entradaRepositorio.save(entradaGenerada);
+             }
         }
         return entradasGeneradas;
+    }
+    
+    public long generarNroEntrada(){
+        long ultimoNro = 0;
+        if(!entradaRepositorio.findFirstByOrderByNumeroDesc().isEmpty()){
+            ultimoNro = entradaRepositorio.findFirstByOrderByNumeroDesc().get().getNumero();
+        }
+        ultimoNro = ultimoNro + 1;
+        return ultimoNro;
     }
 }
