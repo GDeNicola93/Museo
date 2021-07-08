@@ -36,7 +36,21 @@ public class Exposicion implements Serializable {
     private List<DetalleExposicion> detalleExposicion = new ArrayList<>();
     
     public boolean esVigente(LocalDate fechaActual){
-        return true;
+        LocalDate inicio = this.getFechaInicio();
+        LocalDate fin = this.getFechaFin();
+        
+        if(this.getFechaInicioReplanificada() != null){
+            inicio = this.getFechaInicioReplanificada();
+        }
+        if(this.getFechaFinReplanificada() != null){
+            fin = this.getFechaFinReplanificada();
+        }
+        
+        if(fechaActual.isAfter(inicio) && fechaActual.isBefore(fin)){
+            return true;
+        }else{
+            return false;
+        }  
     }
     
     public LocalTime calcularDuracionObrasExpuestas(){
